@@ -8,7 +8,7 @@ class Handler(BaseHTTPRequestHandler):
         route=self.path.split('?')[0]
         if route in ('/api/case','/case.json'):
             body=json.dumps(load_case()).encode(); mime='application/json'
-        elif route in ('/core.mjs','/live.mjs','/ui.mjs','/aml.mjs','/casefile.mjs'):
+        elif route in ('/core.mjs','/live.mjs','/ui.mjs','/aml.mjs','/casefile.mjs', '/qc.mjs'):
             body=(ROOT/'static'/route[1:]).read_bytes(); mime='text/javascript; charset=utf-8'
         elif route in ('/','/index.html'):
             body=(ROOT/'static/index.html').read_bytes(); mime='text/html; charset=utf-8'

@@ -127,3 +127,13 @@ Use **Save portable case file** to download a JSON file with the current evidenc
 Versioned files contain a SHA-256 checksum of the payload. On import, the tool checks the checksum, Ethereum/USDT scope, event identifiers, exact amounts, block bounds and note/evidence references. This detects accidental file changes; anyone who edits the file can recalculate the checksum, so it does not prove authenticity or chain inclusion. Imported data is explicitly marked as not reverified against a node and cannot be expanded directly. Start a fresh query to collect new evidence.
 
 Older case JSON and evidence bundles remain importable, with a no-checksum notice. Unsupported files, oversized files (over 20 MB), bad event amounts and dangling pinned references are rejected before replacing the displayed case. The saved example's full raw evidence remains available in this repository; case exports include raw responses only when present in that case.
+
+## QC review workflow
+
+After documenting the case and completing the checklist, enter an analyst reference and submit a snapshot for QC. Each submission preserves its scope, decoded events, pinned evidence, indicator assessments and narrative. Reviewers can attach categorized findings to a transaction or the overall conclusion, record a decision rationale, and return the submission for correction or complete QC. Analysts respond to findings and submit revised drafts as a new round. Changes to the current evidence or assessment invalidate its match with the reviewed submission; prior outcomes stay attached to their original snapshot.
+
+Use **Save portable case file** to hand the evidence, notes and QC history to another person. **Open case file** restores that history; the export checksum detects changes but is not authentication. The summary includes review decisions and findings, and each full submission can also be downloaded separately for inspection. Up to 20 rounds and 100 findings per round are supported within the existing 20 MB file limit.
+
+This is a file-based workflow prototype, not an authenticated case-management system. Names and timestamps are self-reported/browser-generated. It does not enforce reviewer independence, permissions or a tamperproof audit trail. QC completion is a documentation outcome, not a clearance determination.
+
+QC regression tests: `node --test tests/test_qc.mjs`.

@@ -1,13 +1,14 @@
+import {CATEGORIES,submit,addFinding,decide,changed,qcReport} from './qc.mjs';
 import {makeCaseFile,openCaseFile,MAX_FILE_BYTES} from './casefile.mjs';
 import {CHECKS,indicators,counterparties,readiness,reviewAppendix} from './aml.mjs';
 import {findings,csv,report,mergeReview,ZERO} from './core.mjs';
 import {collect} from './live.mjs';
 
-const $=id=>document.getElementById(id),short=a=>a.slice(0,8)+'…'+a.slice(-6);let loadGeneration=0;let data,visible=[],selected='',controller=null,evidenceFilter=null,pinned=new Set(),indicatorReviews={};const notesByCase=new Map();
+const $=id=>document.getElementById(id),short=a=>a.slice(0,8)+'…'+a.slice(-6);let loadGeneration=0;let data,visible=[],selected='',controller=null,evidenceFilter=null,pinned=new Set(),indicatorReviews={},qc=[];const notesByCase=new Map();
 const savedNoteSnapshots=new Map();
 const key=c=>(c.import_session_id||c.mode||'saved')+':'+c.manifest.seed+':'+c.manifest.from_block+':'+c.manifest.to_block;
 const noteFields=['observations','alternatives','next','disposition','caseTitle','trigger','expectedActivity','contextSource','rationale','expectedMax'];
-const readNotes=()=>({...Object.fromEntries(noteFields.map(k=>[k,$(k).value])),pinned:[...pinned],indicatorReviews:structuredClone(indicatorReviews),checks:CHECKS.filter(([id])=>$('check-'+id).checked).map(([id])=>id)});
+const readNotes=()=>({qc:structuredClone(qc),...Object.fromEntries(noteFields.map(k=>[k,$(k).value])),pinned:[...pinned],indicatorReviews:structuredClone(indicatorReviews),checks:CHECKS.filter(([id])=>$('check-'+id).checked).map(([id])=>id)});
 
 function node(tag,text,cls){let n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n}
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));let a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
@@ -18,6 +19,7 @@ function showCase(d,restoredNotes){
  for(const id of ['cards','graph','findings','provenance','sequences','peer'])$(id).replaceChildren();
  $('detail').textContent='Select a transaction for full evidence details.';
  for(const k of noteFields)$(k).value=notesByCase.get(key(d))?.[k]|| (k==='disposition'?'Unreviewed':'');
+ qc=structuredClone(notesByCase.get(key(d))?.qc||[]);
  pinned=new Set(notesByCase.get(key(d))?.pinned||[]);indicatorReviews=structuredClone(notesByCase.get(key(d))?.indicatorReviews||{});for(const [id]of CHECKS)$('check-'+id).checked=notesByCase.get(key(d))?.checks?.includes(id)||false;
  const m=d.manifest,f=findings(d.events,m.seed);$('mode').textContent=d.mode||'Saved training case';$('status').textContent=d.events.length?'Case ready. Review coverage before drawing conclusions.':'No USDT events returned within this window. This does not establish absence of activity outside the scope.';$('content').hidden=false;
  for(const [label,value]of [['Case addresses',d.nodes.length],['Returned events',d.events.length],['Incoming USDT',f.in_total],['Outgoing USDT',f.out_total]]){let c=node('div','','card');c.append(node('span',label,'label'),node('strong',value));$('cards').append(c)}
@@ -30,7 +32,7 @@ function showCase(d,restoredNotes){
  $('expand').disabled=!d.queried_addresses||d.queried_addresses.length>=5||!peers.length;$('peer').disabled=$('expand').disabled;
  $('expansion').textContent=d.queried_addresses?'Queried addresses: '+d.queried_addresses.length+'/5. Expand one counterparty at a time within the same UTC window. Unqueried peers are not cleared.':'Counterparty expansion is available after a new address query. The saved case already includes its bounded two-hop neighborhood.';
  if(d.import_info)$('provenance').append(node('p',d.import_info.integrity+' '+d.import_info.warning,'notice'));
- graph();render();renderAml();renderPins();if(restoredNotes)savedNoteSnapshots.set(key(data),JSON.stringify(readNotes()));
+ graph();render();renderAml();renderPins();renderQc();if(restoredNotes)savedNoteSnapshots.set(key(data),JSON.stringify(readNotes()));
 }
 async function saved(){const generation=++loadGeneration;if(controller)controller.abort();try{const r=await fetch('./case.json');if(!r.ok)throw Error('Saved case unavailable.');const loaded=await r.json();if(generation===loadGeneration)showCase(loaded)}catch(e){$('status').textContent=e.message}}
 $('loadsaved').onclick=saved;
@@ -45,14 +47,14 @@ async function runReview(seed,start,end,expand=false){
 $('intake').onsubmit=e=>{e.preventDefault();runReview($('seed').value,$('start').value+'Z',$('end').value+'Z')};
 $('expand').onclick=()=>runReview($('peer').value,data.start,data.end,true);
 $('cancel').onclick=()=>controller?.abort();
-$('report').onclick=()=>{try{download('investigation-review.md',report(data,readNotes())+reviewAppendix(data,readNotes()),'text/markdown')}catch(e){$('indicatorError').textContent=e.message;$('expectedMax').focus()}};
+$('report').onclick=()=>{try{download('investigation-review.md',report(data,readNotes())+reviewAppendix(data,readNotes())+qcReport(qc),'text/markdown')}catch(e){$('indicatorError').textContent=e.message;$('expectedMax').focus()}};
 $('bundle').onclick=async()=>{try{const notes=readNotes(),caseKey=key(data),file=await makeCaseFile(data,notes);download('trace-desk-case.json',JSON.stringify(file,null,2),'application/json');savedNoteSnapshots.set(caseKey,JSON.stringify(notes));$('fileStatus').textContent='Case download started. Keep the file to reopen your evidence and notes later.'}catch(e){$('fileStatus').textContent='Could not save case: '+e.message}};
 const end=new Date(Date.now()-30*60000);end.setUTCSeconds(0,0);$('end').value=end.toISOString().slice(0,16);$('start').value=new Date(end.getTime()-30*60000).toISOString().slice(0,16);
 $('search').oninput=()=>{evidenceFilter=null;render()};$('reset').onclick=()=>{selected='';evidenceFilter=null;$('search').value='';render()};$('json').onclick=()=>download('case.json',JSON.stringify(data,null,2),'application/json');$('csv').onclick=()=>{let keys=['timestamp','block','tx','log_index','source','target','amount','units'];download('transfers.csv',[keys.join(','),...visible.map(e=>keys.map(k=>'"'+String(e[k]).replaceAll('"','""')+'"').join(','))].join('\n'),'text/csv')};
 
 function filterEvidence(ids){selected='';$('search').value='';evidenceFilter=new Set(ids);render();$('evidence').scrollIntoView({behavior:'smooth'})}
 function renderPins(){ $('pins').replaceChildren();for(const id of pinned){const e=data.events.find(e=>e.id===id);if(!e)continue;const row=node('div','','pin');const b=node('button',short(e.tx)+' / '+e.log_index+' · '+e.amount+' USDT');b.onclick=()=>filterEvidence([id]);const remove=node('button','Remove');remove.onclick=()=>{pinned.delete(id);renderPins()};row.append(b,remove);$('pins').append(row)}if(!pinned.size)$('pins').textContent='No evidence pinned yet.';updateReadiness()}
-function updateReadiness(){if(!data)return;const gaps=readiness(readNotes());$('readiness').textContent=gaps.length?'Draft review: '+gaps.length+' documentation items remain. Export is available at any time.':'Documentation checklist complete. This is not compliance approval.'}
+function updateReadiness(){if(!data)return;updateQcStatus();const gaps=readiness(readNotes());$('readiness').textContent=gaps.length?'Draft review: '+gaps.length+' documentation items remain. Export is available at any time.':'Documentation checklist complete. This is not compliance approval.'}
 function renderAml(){
  $('indicators').replaceChildren();$('indicatorError').textContent='';let flags=[];try{flags=indicators(data,$('expectedMax').value)}catch(e){$('indicatorError').textContent=e.message;flags=indicators(data,'')}
  if(!flags.length)$('indicators').append(node('p','No configured indicators triggered. This is not a clearance determination.'));
@@ -67,4 +69,16 @@ saved();
 
 $('openfile').onclick=()=>$('casefile').click();
 $('casefile').onchange=async()=>{const file=$('casefile').files[0];if(!file||controller)return;loadGeneration++;for(const id of ['openfile','run','loadsaved','expand'])$(id).disabled=true;try{if(file.size>MAX_FILE_BYTES)throw Error('Case files must be 20 MB or smaller.');const opened=await openCaseFile(await file.text());opened.case.import_session_id=crypto.randomUUID();showCase(opened.case,opened.analyst_notes);$('fileStatus').textContent='Opened '+file.name+'. Imported evidence is labeled separately from node-collected data.'}catch(e){$('fileStatus').textContent='Case not opened: '+e.message+' Current case unchanged.'}finally{for(const id of ['openfile','run','loadsaved'])$(id).disabled=false;$('expand').disabled=!data?.queried_addresses||data.queried_addresses.length>=5||!$('peer').options.length;$('casefile').value=''}};
-window.addEventListener('beforeunload',event=>{if(!data)return;const all=new Map(notesByCase);all.set(key(data),readNotes());for(const [id,n]of all){const hasWork=n.pinned.length||n.checks.length||Object.keys(n.indicatorReviews).length||noteFields.some(k=>k==='disposition'?n[k]!=='Unreviewed':n[k].trim());if(hasWork&&JSON.stringify(n)!==savedNoteSnapshots.get(id)){event.preventDefault();event.returnValue='';break}}});
+window.addEventListener('beforeunload',event=>{if(!data)return;const all=new Map(notesByCase);all.set(key(data),readNotes());for(const [id,n]of all){const hasWork=n.qc?.length||n.pinned.length||n.checks.length||Object.keys(n.indicatorReviews).length||noteFields.some(k=>k==='disposition'?n[k]!=='Unreviewed':n[k].trim());if(hasWork&&JSON.stringify(n)!==savedNoteSnapshots.get(id)){event.preventDefault();event.returnValue='';break}}});
+
+function updateQcStatus(){if(!data)return;const r=qc.at(-1);$('qcStatus').textContent=!r?'Analyst draft · no submission yet.':`Submission ${r.version}: ${r.status}. `+(changed(r,data,readNotes())?'Current draft differs from the submitted version. Any QC outcome applies only to that snapshot.':'Current draft matches the submitted evidence and assessment.');}
+function qcAction(action){try{action();$('qcError').textContent='';renderQc()}catch(e){$('qcError').textContent=e.message}}
+function renderQc(){updateQcStatus();$('qcHistory').replaceChildren();const latest=qc.at(-1);$('qcSubmit').disabled=latest?.status==='Submitted for QC';$('qcReview').hidden=latest?.status!=='Submitted for QC';$('qcReference').replaceChildren(node('option','Conclusion / overall scope'));$('qcReference').firstChild.value='conclusion';for(const e of latest?.snapshot.events||[]){const o=node('option',e.id+' · '+e.amount+' USDT');o.value=e.id;$('qcReference').append(o)}
+ for(const r of [...qc].reverse()){const box=node('section','','indicator');box.append(node('h3',`Submission ${r.version} · ${r.status}`),node('p',`Analyst: ${r.analyst} · Submitted: ${r.submitted_at}`));const inspect=node('details','');inspect.append(node('summary','Inspect submitted assessment and evidence'));const pre=node('pre',JSON.stringify(r.snapshot,null,2),'mono');pre.style.whiteSpace='pre-wrap';inspect.append(pre);box.append(inspect);const exportButton=node('button','Download submission '+r.version);exportButton.onclick=()=>download('qc-submission-'+r.version+'.json',JSON.stringify(r,null,2),'application/json');box.append(exportButton);
+ for(const f of r.findings){box.append(node('h4',f.category),node('p',f.reference,'mono'),node('p',f.comment));const label=node('label','Analyst response');const input=document.createElement('textarea');input.value=f.response;input.disabled=r.status!=='Submitted for QC'&&r!==latest;input.disabled ||= r.status==='QC completed';input.oninput=()=>{f.response=input.value;updateQcStatus()};label.append(input);box.append(label)}if(r.decision_reason)box.append(node('p',`Reviewer: ${r.reviewer} · ${r.decided_at}`),node('p',r.decision_reason));$('qcHistory').append(box)}
+}
+for(const category of CATEGORIES)$('qcCategory').append(node('option',category));
+$('qcSubmit').onclick=()=>qcAction(()=>{qc=submit(qc,data,readNotes(),$('qcAnalyst').value);$('qcReviewer').value='';$('qcReason').value=''});
+$('qcAdd').onclick=()=>qcAction(()=>{addFinding(qc.at(-1),$('qcCategory').value,$('qcReference').value,$('qcComment').value);$('qcComment').value=''});
+$('qcReturn').onclick=()=>qcAction(()=>decide(qc.at(-1),'Returned for correction',$('qcReviewer').value,$('qcReason').value));
+$('qcComplete').onclick=()=>qcAction(()=>{if(changed(qc.at(-1),data,readNotes()))throw Error('The draft has changed. Return this submission and submit the revised draft for QC.');decide(qc.at(-1),'QC completed',$('qcReviewer').value,$('qcReason').value)});
