@@ -1,6 +1,8 @@
 # Trace Desk — USDT investigator work sample
 
-**[Open the public interactive demo](https://brandon-usdt-investigator.brandon-d-candela.chatgpt.site)** — no installation, login, API key, or wallet connection required. Explore the saved case in your browser; use the instructions below to reproduce it locally.
+**[Original saved-case demo](https://brandon-usdt-investigator.brandon-d-candela.chatgpt.site/)** — instant 15-address example.
+
+**[Live AML review workspace](https://brandon-usdt-workspace.brandon-d-candela.chatgpt.site/)** — query an address, expand counterparties, and export your assessment. No login or wallet connection required.
 
 An AML review workspace with a Python evidence pipeline and a dependency-free JavaScript interface. Start with the verified saved example or query a new Ethereum address, expand observed counterparties, record your assessment, and export a handoff report. Built with AI assistance as an entry-level investigator portfolio project.
 
