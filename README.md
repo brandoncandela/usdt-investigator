@@ -58,7 +58,7 @@ The raw cache includes all fetched window events, including addresses outside th
 ```sh
 python3 -m unittest discover -s tests -v
 python3 verify.py
-node --test tests/test_workspace.mjs tests/test_aml.mjs
+node --test tests/test_workspace.mjs tests/test_aml.mjs tests/test_casefile.mjs
 ```
 
 Offline reproduction regenerates the case from saved responses every time the dashboard starts. `data/manifest.json` records parameters, seed selection, source, retrieval time, and SHA-256 digests. `data/raw/*.json` preserves each request, parsed JSON response, and capture time. Formatting is normalized JSON, not original HTTP bytes.
@@ -119,3 +119,11 @@ The live workspace now includes an AML-specific review layer:
 - A handoff report that includes context, disposition rationale, checklist state, indicator limitations and evidence IDs, analyst responses, and pinned transactions.
 
 Notes, context and assessments remain in the current tab only. Export before closing or refreshing. The tool does not file SARs, screen sanctions, establish beneficial ownership or make compliance decisions. All indicators describe only returned evidence within the selected scope.
+
+## Save and reopen cases
+
+Use **Save portable case file** to download a JSON file with the current evidence, notes, context, per-indicator reviews, pinned transactions and checklist. Use **Open case file** to resume it later. Files stay in the browser; there is no upload or automatic server storage. Save before closing. A browser leave-page warning is requested when notes have not been exported, but browser settings can suppress it.
+
+Versioned files contain a SHA-256 checksum of the payload. On import, the tool checks the checksum, Ethereum/USDT scope, event identifiers, exact amounts, block bounds and note/evidence references. This detects accidental file changes; anyone who edits the file can recalculate the checksum, so it does not prove authenticity or chain inclusion. Imported data is explicitly marked as not reverified against a node and cannot be expanded directly. Start a fresh query to collect new evidence.
+
+Older case JSON and evidence bundles remain importable, with a no-checksum notice. Unsupported files, oversized files (over 20 MB), bad event amounts and dangling pinned references are rejected before replacing the displayed case. The saved example's full raw evidence remains available in this repository; case exports include raw responses only when present in that case.
