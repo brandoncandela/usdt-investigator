@@ -58,7 +58,7 @@ The raw cache includes all fetched window events, including addresses outside th
 ```sh
 python3 -m unittest discover -s tests -v
 python3 verify.py
-node --test tests/test_workspace.mjs
+node --test tests/test_workspace.mjs tests/test_aml.mjs
 ```
 
 Offline reproduction regenerates the case from saved responses every time the dashboard starts. `data/manifest.json` records parameters, seed selection, source, retrieval time, and SHA-256 digests. `data/raw/*.json` preserves each request, parsed JSON response, and capture time. Formatting is normalized JSON, not original HTTP bytes.
@@ -106,3 +106,16 @@ MIT license for project code; public node evidence is included for reproducibili
 Python tests cover the saved evidence pipeline. Node tests cover exact large token amounts, Python/JavaScript parity, malformed logs, UTC boundaries, duplicate/conflicting events, provider failures, cancellation, empty scopes, report evidence and counterparty expansion constraints. A real node query of the example subject from 2026-09-08 03:12 to 03:29 UTC returned its 12 direct events; expanding the intermediary reproduced the candidate 353.912839 USDT sequence. Provider availability is not guaranteed by this one successful check.
 
 Build for static hosting with `python3 build_demo.py`. The published app performs new queries directly in the browser; Python prepares and verifies the saved sample. No claim is made that the live browser collector executes Python on the hosting service.
+
+## AML review features
+
+The live workspace now includes an AML-specific review layer:
+
+- Evidence-linked descriptive indicators: equal-amount sequences, three or more incoming/outgoing counterparties, very small incoming transfers, and transfers above an optional analyst-entered expectation. These are heuristics, not risk scores, regulatory thresholds or findings of suspicious activity.
+- A subject counterparty ledger, ranked by observed incoming plus outgoing USDT, with direct access to supporting events.
+- A case profile with review trigger, expected activity and the source of that analyst-supplied context. No identity or customer profile is inferred from blockchain data.
+- Per-indicator analyst assessment and reasoning. Expanding the case resets indicator assessments to Unreviewed because the evidence set changed; entered reasoning remains available for revision.
+- Pinned transaction evidence and a five-item review checklist. Documentation readiness is not compliance approval. Exports remain available for incomplete drafts.
+- A handoff report that includes context, disposition rationale, checklist state, indicator limitations and evidence IDs, analyst responses, and pinned transactions.
+
+Notes, context and assessments remain in the current tab only. Export before closing or refreshing. The tool does not file SARs, screen sanctions, establish beneficial ownership or make compliance decisions. All indicators describe only returned evidence within the selected scope.
