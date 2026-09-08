@@ -1,0 +1,14 @@
+{
+  "retrieved_at": "2026-09-08T03:46:02.288486+00:00",
+  "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "eth_chainId",
+    "params": []
+  },
+  "response": {
+    "id": 1,
+    "jsonrpc": "2.0",
+    "result": "0x1"
+  }
+}
