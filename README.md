@@ -1,5 +1,7 @@
 # Trace Desk — USDT investigator work sample
 
+**[Open the public interactive demo](https://brandon-usdt-investigator.brandon-d-candela.chatgpt.site)** — no installation, login, API key, or wallet connection required. Explore the saved case in your browser; use the instructions below to reproduce it locally.
+
 A small Python investigation dashboard using **real Ethereum node data**, with a saved case that runs offline without an API key. Built as an entry-level blockchain investigator portfolio exercise. No paid service, wallet, or credentials required.
 
 ## Start in two minutes
