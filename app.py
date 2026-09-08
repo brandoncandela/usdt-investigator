@@ -6,8 +6,10 @@ from investigator import ROOT, load_case
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         route=self.path.split('?')[0]
-        if route=='/api/case':
+        if route in ('/api/case','/case.json'):
             body=json.dumps(load_case()).encode(); mime='application/json'
+        elif route in ('/core.mjs','/live.mjs','/ui.mjs'):
+            body=(ROOT/'static'/route[1:]).read_bytes(); mime='text/javascript; charset=utf-8'
         elif route in ('/','/index.html'):
             body=(ROOT/'static/index.html').read_bytes(); mime='text/html; charset=utf-8'
         else:
