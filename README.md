@@ -1,10 +1,14 @@
 # USDT Investigator — Original Saved Case
 
-**[Open the original demo](https://brandon-usdt-investigator.brandon-d-candela.chatgpt.site/)**
+![USDT Investigator — Original Saved Case](docs/social-preview.jpg)
+
+**[▶ Open the live demo](https://brandoncandela.github.io/usdt-investigator/)** · [Portfolio](https://brandoncandela.github.io/) · [LinkedIn](https://www.linkedin.com/in/brandon-candela/) · Built by Brandon Candela, CAMS
+
+> **What this shows:** A reproducible blockchain investigation from raw Ethereum node data: transaction evidence, a two-hop relationship graph and a written analyst report.
 
 This repository contains the original fixed 15-address investigation work sample.
 
-A small Python investigation dashboard using **real Ethereum node data**, with a saved case that runs offline without an API key. Built as an entry-level blockchain investigator portfolio exercise. No paid service, wallet, or credentials required.
+A small Python investigation dashboard using **real Ethereum node data**, with a saved case that runs offline without an API key. No paid service, wallet, or credentials required.
 
 ## Start in two minutes
 
@@ -16,7 +20,6 @@ python3 app.py
 
 On Windows use `py app.py`. Open **http://127.0.0.1:8000** in your browser. Keep Terminal open; Ctrl+C stops the server. If port 8000 is busy, run `python3 app.py --port 8001` and open port 8001. No `pip install` is needed.
 
-On the original Mac, double-click `Launch.command`. It also finds the bundled Codex Python when Apple's default Python is unavailable. The portable command above works for reviewers with Python installed.
 
 ## What to inspect
 
