@@ -15,7 +15,7 @@ html=html.replace('<title>Trace Desk | USDT investigation</title>','<title>Brand
 html=html.replace('main{max-width:1400px;margin:auto;padding:32px 4vw}','main{max-width:1400px;margin:auto;padding:20px 4vw}').replace('font-size:9','font-size:12')
 html=html.replace('<div id="status">','<noscript>This interactive demo requires JavaScript. You can still read the <a href="https://github.com/brandoncandela/usdt-investigator/blob/main/CASE_REPORT.md">case report on GitHub</a>.</noscript><div id="status">')
 (out/'index.html').write_text(html)
-for asset in ('style.css','public-sans.ttf','public-sans-license.txt'):
+for asset in ('style.css','motion.js','public-sans.ttf','public-sans-license.txt'):
     shutil.copy2(ROOT/'static'/asset,out/asset)
 assert json.loads((out/'case.json').read_text())==case
 assert '/api/case' not in html

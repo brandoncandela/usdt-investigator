@@ -21,4 +21,5 @@ $('play').onclick=()=>{if(playbackTimer){stopPlayback();return}if(playbackIndex>
 $('next-event').onclick=()=>{stopPlayback();advancePlayback()};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPlayback()});
 $('search').oninput=()=>{stopPlayback();render()};$('reset').onclick=()=>{stopPlayback();selected='';$('search').value='';render()};$('json').onclick=()=>download('case.json',JSON.stringify(data,null,2),'application/json');$('csv').onclick=()=>{let keys=['timestamp','block','tx','log_index','source','target','amount','units'];download('transfers.csv',[keys.join(','),...visible.map(e=>keys.map(k=>'"'+String(e[k]).replaceAll('"','""')+'"').join(','))].join('\n'),'text/csv')};
-</script></body></html>
+</script><script src="motion.js" defer></script>
+</body></html>

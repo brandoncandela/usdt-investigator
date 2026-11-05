@@ -3,6 +3,8 @@ import json, argparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from investigator import ROOT, load_case
 
+ASSETS={'/style.css':'text/css; charset=utf-8','/motion.js':'text/javascript; charset=utf-8','/public-sans.ttf':'font/ttf'}
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         route=self.path.split('?')[0]
@@ -10,6 +12,8 @@ class Handler(BaseHTTPRequestHandler):
             body=json.dumps(load_case()).encode(); mime='application/json'
         elif route in ('/','/index.html'):
             body=(ROOT/'static/index.html').read_bytes(); mime='text/html; charset=utf-8'
+        elif route in ASSETS:
+            body=(ROOT/'static'/route[1:]).read_bytes(); mime=ASSETS[route]
         else:
             self.send_error(404); return
         self.send_response(200)
