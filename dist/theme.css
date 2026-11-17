@@ -1,0 +1,61 @@
+/* White and blue portfolio look for this demo, with a cyan accent. Loaded after style.css and apple.css. */
+:root {
+  color: #1d1d1f; background: #fbfcff; color-scheme: light;
+  --muted: #55555d; --line: rgb(29 29 31 / .09); --surface: rgb(255 255 255 / .74); --surface-2: #f2f7fc;
+  --mint: #0891b2; --amber: #b26a00; --blue: #4f63e6;
+  --glass-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 12px 32px rgb(30 58 138 / .07);
+}
+html, body { background: #fbfcff; }
+body { font-family: "Inter", system-ui, sans-serif; color: #1d1d1f; }
+p { color: var(--muted); }
+h1, h2 { color: #1d1d1f; }
+a { color: var(--mint); }
+
+header { background: rgb(251 252 255 / .72); border-bottom: 1px solid var(--line); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); position: sticky; top: 0; z-index: 20; }
+.brand { color: #1d1d1f; letter-spacing: -.01em; }
+.tag { color: var(--mint); }
+
+.ap-top { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, .9fr); gap: 32px; align-items: center; margin-bottom: 24px; }
+.ap-top > * { min-width: 0; }
+.ap-top .intro { margin: 0; }
+.intro, .purpose, .panel, .cards {
+  background: var(--surface); border: 1px solid rgb(255 255 255 / .7); border-radius: 18px;
+  box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+.intro { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; padding: 0; }
+.intro h1 { font-weight: 800; letter-spacing: -.035em; }
+.purpose summary { color: var(--mint); }
+.purpose ul { color: var(--muted); }
+
+.cards { overflow: hidden; background: var(--line); gap: 1px; }
+.card { background: rgb(255 255 255 / .9); }
+.card strong { color: var(--mint); letter-spacing: -.03em; }
+.label { color: #86868b; }
+
+svg { background: rgb(255 255 255 / .6); border: 1px solid var(--line); border-radius: 14px; }
+.node circle { stroke: #fff; }
+.node:hover circle, .node.selected circle { stroke: #1d1d1f; filter: drop-shadow(0 0 6px rgb(8 145 178 / .45)); }
+.node:focus circle { stroke: #1d1d1f; }
+#graph line.active { stroke: var(--mint); }
+
+button, input { background: rgb(29 29 31 / .06); color: #1d1d1f; border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 600; }
+input { background: #fff; border: 1px solid rgb(29 29 31 / .14); font-weight: 400; }
+button:hover { background: rgb(29 29 31 / .1); border: 0; }
+.playback button:first-child { background: #1d1d1f; color: #fff; }
+.playback button:first-child:hover { background: #000; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid rgb(8 145 178 / .4); }
+
+table { border: 0; }
+th { background: rgb(251 252 255 / .95); color: #86868b; font-weight: 500; }
+tbody tr:hover { background: rgb(8 145 178 / .06); }
+.evidence { background: #f5f8ff; border: 0; border-radius: 12px; color: #1d1d1f; }
+.pill { background: rgb(8 145 178 / .1); border: 0; border-radius: 999px; color: #0e7490; }
+.notice { background: #fff5e3; border: 0; border-radius: 12px; color: #7a4a00; }
+.error { color: #c4302b; }
+.muted { color: #86868b; }
+
+@media (max-width: 860px) {
+  .ap-top { grid-template-columns: minmax(0, 1fr); }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .layout { grid-template-columns: minmax(0, 1fr) !important; }
+}
