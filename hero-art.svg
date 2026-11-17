@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 440" role="img" aria-label="USDT transfer graph around a subject address with a replay timeline">
+<defs>
+  <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef4ff"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa9ff"/><stop offset="1" stop-color="#0066cc"/></linearGradient>
+  <linearGradient id="indigo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b93ff"/><stop offset="1" stop-color="#4338ca"/></linearGradient>
+  <radialGradient id="glowA" cx=".2" cy=".15" r=".6"><stop offset="0" stop-color="#5aa9ff" stop-opacity=".45"/><stop offset="1" stop-color="#5aa9ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="glowB" cx=".9" cy=".9" r=".6"><stop offset="0" stop-color="#8b93ff" stop-opacity=".4"/><stop offset="1" stop-color="#8b93ff" stop-opacity="0"/></radialGradient>
+  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1e3a8a" flood-opacity=".10"/></filter>
+</defs>
+<style>
+  .pulse { animation: pulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .flow { stroke-dasharray: 6 10; animation: flow 1.6s linear infinite; }
+  @keyframes pulse { 50% { transform: scale(1.18); opacity: .75; } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes grow { from { transform: scaleY(0); } }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes flow { to { stroke-dashoffset: -32; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; stroke-dashoffset: 0 !important; } }
+</style>
+<rect width="560" height="440" rx="28" fill="url(#panel)"/>
+<rect width="560" height="440" rx="28" fill="url(#glowA)"/>
+<rect width="560" height="440" rx="28" fill="url(#glowB)"/>
+<rect x=".5" y=".5" width="559" height="439" rx="27.5" fill="none" stroke="#ffffff" stroke-opacity=".9"/>
+<line x1="280" y1="228" x2="454.9" y2="251.4" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="390.0" y2="287.4" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="369.7" y2="322.7" stroke="#c4302b" stroke-opacity=".55" stroke-width="2" class="flow"/>
+<line x1="280" y1="228" x2="308.7" y2="331.8" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="264.6" y2="346.0" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="198.8" y2="328.7" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class="flow"/>
+<line x1="280" y1="228" x2="172.5" y2="290.3" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="129.7" y2="218.1" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="130.3" y2="171.0" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="191.7" y2="151.0" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="262.3" y2="104.5" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="325.6" y2="107.7" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="392.2" y2="152.9" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="280" y1="228" x2="419.5" y2="188.9" stroke="#5aa9ff" stroke-opacity=".55" stroke-width="2" class=""/>
+<line x1="454.9" y1="251.4" x2="369.7" y2="322.7" stroke="#8b93ff" stroke-opacity=".35" stroke-width="1.5"/>
+<line x1="264.6" y1="346.0" x2="172.5" y2="290.3" stroke="#8b93ff" stroke-opacity=".35" stroke-width="1.5"/>
+<line x1="130.3" y1="171.0" x2="262.3" y2="104.5" stroke="#8b93ff" stroke-opacity=".35" stroke-width="1.5"/>
+<line x1="392.2" y1="152.9" x2="454.9" y2="251.4" stroke="#8b93ff" stroke-opacity=".35" stroke-width="1.5"/>
+<circle cx="454.9" cy="251.4" r="9" fill="#4f63e6" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:0ms"/>
+<circle cx="390.0" cy="287.4" r="9" fill="#4f63e6" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:80ms"/>
+<circle cx="369.7" cy="322.7" r="20" fill="#c4302b" fill-opacity=".14" class="pulse"/>
+<circle cx="369.7" cy="322.7" r="10" fill="#c4302b" stroke="#fff" stroke-width="3"/>
+<circle cx="308.7" cy="331.8" r="9" fill="#0066cc" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:240ms"/>
+<circle cx="264.6" cy="346.0" r="8" fill="#2563eb" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:320ms"/>
+<circle cx="198.8" cy="328.7" r="9" fill="#38a6f4" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:400ms"/>
+<circle cx="172.5" cy="290.3" r="9" fill="#38a6f4" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:480ms"/>
+<circle cx="129.7" cy="218.1" r="9" fill="#8b93ff" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:560ms"/>
+<circle cx="130.3" cy="171.0" r="7" fill="#2563eb" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:640ms"/>
+<circle cx="191.7" cy="151.0" r="7" fill="#5aa9ff" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:720ms"/>
+<circle cx="262.3" cy="104.5" r="8" fill="#8b93ff" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:800ms"/>
+<circle cx="325.6" cy="107.7" r="9" fill="#2563eb" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:880ms"/>
+<circle cx="392.2" cy="152.9" r="9" fill="#0066cc" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:960ms"/>
+<circle cx="419.5" cy="188.9" r="7" fill="#0066cc" stroke="#fff" stroke-width="3" class="fade" style="animation-delay:1040ms"/>
+<circle cx="280" cy="228" r="34" fill="#0066cc" fill-opacity=".12" class="pulse"/>
+<circle cx="280" cy="228" r="20" fill="url(#blue)" stroke="#fff" stroke-width="4"/>
+<text x="280" y="232" font-family="Inter, -apple-system, Segoe UI, sans-serif" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">SUBJ</text><rect x="28" y="352" width="504" height="60" rx="16" fill="#fff" fill-opacity=".86" stroke="#1d1d1f" stroke-opacity=".06" filter="url(#soft)" /><rect x="48" y="377" width="380" height="8" rx="4" fill="#eef4ff"/><rect x="48" y="377" width="250" height="8" rx="4" fill="url(#blue)" class="fade"/><circle cx="298" cy="381" r="9" fill="#fff" stroke="#0066cc" stroke-width="3" class="pulse"/><text x="512" y="386" font-family="Inter, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#0066cc" text-anchor="end">▶ replay</text><rect x="28" y="26" width="196" height="64" rx="16" fill="#fff" fill-opacity=".86" stroke="#1d1d1f" stroke-opacity=".06" filter="url(#soft)" /><text x="46" y="52" font-family="Inter, -apple-system, Segoe UI, sans-serif" font-size="14" font-weight="700" fill="#1d1d1f" text-anchor="start">15 USDT transfers</text><text x="46" y="72" font-family="Inter, -apple-system, Segoe UI, sans-serif" font-size="11" font-weight="500" fill="#55555d" text-anchor="start">Ethereum · public chain data</text>
+</svg>
